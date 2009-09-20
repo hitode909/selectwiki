@@ -11,7 +11,7 @@ module Api
       @word_name = url_decode request[:word]
       @word      = Word.find(:name => @word_name)
       @description_body = url_decode request[:description]
-      @description = Description.find(:id => request[:id])
+      @description = Description.find(:id => request[:id], :word_id => (@word.id || 0))
       @error = []
     end
 
@@ -21,7 +21,7 @@ module Api
     end
 
     def add
-      return unless @description_body.length > 0
+      respond('description is required', 400) unless @description_body.length > 0
       @word = Word.create(:name => @word_name) unless @word
 
       begin
@@ -40,7 +40,16 @@ module Api
     end
 
     def delete
-      { :word => @word.to_hash}
+      respond('The word not found', 404) unless @word
+      respond('The description not found') unless @description
+      begin
+        DB.transaction do
+          @description.destroy
+        end
+      end
+      { :word => @word.to_hash,
+        :error => @error.map(&:message),
+      }
     end
   end
 end
