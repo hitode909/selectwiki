@@ -1,7 +1,5 @@
 <ul>
-  <li>
-    <?r @words.each do |word| ?>
-    #{h word.name}
-    <?r end ?>
-  </li>
+  <?r @words.each do |word| ?>
+  <li>#{h word.name}</li>
+  <?r end ?>
 </ul>
