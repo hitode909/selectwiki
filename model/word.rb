@@ -5,7 +5,7 @@ class Word < Sequel::Model
     time :created_at
     time :modified_at
   end
-  one_to_many  :descriptions
+  one_to_many  :descriptions, :order => :id
   create_table unless table_exists?
 
   def before_create
@@ -24,8 +24,10 @@ class Word < Sequel::Model
 
   def add(body)
     return unless body
-    desc = Description.create(:body => body)
-    self.add_description(desc)
+    DB.transaction do
+      desc = Description.create(:body => body)
+      self.add_description(desc)
+    end
   end
 
   def delete(id)

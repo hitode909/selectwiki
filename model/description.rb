@@ -5,6 +5,7 @@ class Description < Sequel::Model
     foreign_key :word_id
     time :created_at
     time :modified_at
+    unique [:word_id, :body]
   end
   many_to_one :word
   create_table unless table_exists?

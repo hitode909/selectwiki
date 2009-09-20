@@ -1,7 +1,8 @@
 module Api
   class WordsController < JsonController
     def index
-      @words = Word.all
+      { :words => Word.all.map(&:to_hash)
+      }
     end
   end
 
@@ -9,49 +10,37 @@ module Api
     before_all do
       @word_name = url_decode request[:word]
       @word      = Word.find(:name => @word_name)
+      @description_body = url_decode request[:description]
+      @description = Description.find(:id => request[:id])
+      @error = []
     end
 
     def index
+      respond('The word not found', 404) unless @word
+      { :word => @word.to_hash}
     end
 
-    def update
+    def add
+      return unless @description_body.length > 0
+      @word = Word.create(:name => @word_name) unless @word
+
+      begin
+        if @description
+          @description.body = @description_body
+          @description.save
+        else
+          @word.add @description_body
+        end
+      rescue => e
+        @error.push e
+      end
+      { :word  => @word.to_hash,
+        :error => @error.map(&:message),
+      }
     end
 
     def delete
+      { :word => @word.to_hash}
     end
   end
 end
-
-
-=begin
-    def subscribe
-      return unless request.post?
-      return unless @uri.length
-      uris = @uri.split(',')
-      @group ||= Group.create(:name => @name)
-      feeds = uris.map{|u| Feed.find_feeds(u.strip)}.flatten.compact
-      feeds.each do |feed|
-        begin
-          @group.add_feed(feed)
-        rescue
-        else
-          Activity.subscribe(@group, feed)
-        end
-      end
-      @group.uniq_feeds
-    end
-
-    def unsubscribe
-      return unless request.post?
-      respond('The group not found', 404) unless @group
-      respond('The feed not found', 404) unless @feed
-      begin
-        @group.remove_feed(@feed)
-      rescue
-      else
-        Activity.unsubscribe(@group, @feed)
-      end
-      @group.uniq_feeds
-    end
-  end
-=end
