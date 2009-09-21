@@ -104,7 +104,7 @@ var gotWords = function(words) {
     elems.mouseover(function() {
         var w = new Ten.SubWindow;
         descriptionElement(w.container, $(this).text());
-        $(w.container).attr('id', 'ten-subwindow-window');
+        $(w.container).attr('id', 'ten-subwindow-container');
         var pos = $(this).position();
         w.show({x: pos.left + $(this).width(), y: pos.top + $(this).height() });
     });
@@ -115,14 +115,9 @@ var gotWords = function(words) {
 with (Ten.SubWindow) {
     showScreen = false;
     draggable = true;
-    handleStyle = false;
-    containerStyle = {
-        margin: "5px",
-        padding: "0"
-    };
     style = {
         zIndex: 2000,
-        width: "15em",
+        width: "18em",
         height: "20em"
     };
     style.textAlign = "left";
@@ -156,10 +151,43 @@ if (typeof(words) == "undefined" || true) {
 }
 
 var style = $("<style>").html(
-    [".select-wiki-keyword {",
-     "text-decoration: underline;",
-     "cursor: pointer;",
-     "background-color: #ffa;",
-     "}"
+    [
+    ".select-wiki-keyword {",
+    "text-decoration: underline;",
+    "cursor: pointer;",
+    "background-color: #ffa;",
+    "}",
+    "#ten-subwindow-container {",
+    "font-color: #000;",
+    "margin: 0px;",
+    "padding: 0px;",
+    "offset: 0px;",
+    "border-width: 0px;",
+    "width: auto;",
+    "background: transparent;",
+    "}",
+    "#ten-subwindow-container h3{",
+    "font-size: 20px;",
+    "font-color: #000;",
+    "margin: 10px;",
+    "padding: 5px;",
+    "offset: 0px;",
+    "font-weight: bold;",
+    "border-width: 0px;",
+    "}",
+    "#ten-subwindow-container ul{",
+    "font-color: #000;",
+    "margin:  0px;",
+    "padding: 20px 4px;",
+    "offset: 0px;",
+    "}",
+    "#ten-subwindow-container li{",
+    "list-style-type: none;",
+    "font-size: 14px;",
+    "font-color: #000;",
+    "margin:  2px;",
+    "padding: 2px;",
+    "offset: 0px;",
+    "}"
     ].join("\n"));
 $("head").append(style);
