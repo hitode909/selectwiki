@@ -108,8 +108,9 @@ var gotWords = function(wordsText) {
     var words = eval("("+wordsText+")");
     var html = document.body.innerHTML;
     $.each(words.words, function() {
-        // XXX: HTMLが壊れる場合があるので，正規表現まともに
-        html = html.replace(new RegExp(this.name, "ig"), "<span class='select-wiki-keyword'>"+this.name+"</span>");
+        // 正規表現これでよいのか検討すべき
+        html = html.replace(new RegExp(["(>[^><]*)(", this.name, ")([^><]*<)"].join(""), "ig"),
+            "$1<span class='select-wiki-keyword'>$2</span>$3");
     });
     document.body.innerHTML = html;
     var keywordStyle = {
