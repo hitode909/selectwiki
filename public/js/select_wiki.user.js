@@ -87,6 +87,7 @@ var getWordsObject = function() {
     return eval("("+words+")");
 };
 
+    // XXX: documentのrootを渡したい
 var gotWords = function(words) {
     var html = document.body.innerHTML;
     $.each(words, function() {
@@ -128,7 +129,7 @@ with (Ten.SubWindow) {
 };
 
 jQuery(document).mouseup(function(){
-    var selection = content.window.getSelection();
+    var selection = content.window.getSelection(); // XXX:ふつうのjs化したいので，うまくやりたい
     if (!selection.rangeCount) return;
     var range = selection.getRangeAt(0);
     if (range.startOffset == range.endOffset || range.startContainer != range.endContainer || range.collapsed) return;
