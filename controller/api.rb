@@ -10,15 +10,14 @@ module Api
   class WordController < JsonController
     before_all do
       @word_name = url_decode request[:word]
-      @word      = Word.find(:name => @word_name)
+      @word      = Word.find_or_create(:name => @word_name)
       @description_body = url_decode request[:description]
       @description = Description.find(:id => request[:id], :word_id => (@word.id || 0))
       @error = []
     end
 
     def index
-      respond('The word not found', 404) unless @word
-      { :word => @word.to_hash}
+      { :word => @word.to_hash }
     end
 
     def add
