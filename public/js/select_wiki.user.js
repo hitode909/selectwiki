@@ -8,28 +8,11 @@
 // @require        http://www.hatena.ne.jp/js/Ten/Ten/SubWindow.js
 // ==/UserScript==
 
-$.fn.extend(function(element) {
-    var subWindow = $("#subwindow");
-    if (!subWindow) {
-        subWindow = $("<div id='subwindow'>");
-        var container = $("<div id='container'>");
-        subWindow.append(container);
-    }
-});
-
 var RootURI = "http://localhost:7000/";
-var p = function(text) {
-    console.log(text);
-};
-    
-var po = function(obj) {
-    console.log(uneval(obj));
-};
 
 var api = function(path) {
     return RootURI + "api/" + path;
 };
-
 
 var gotDescription = function(element, response) {
     if (response.status != 200) return;
@@ -109,6 +92,7 @@ var gotWords = function(wordsText) {
     var html = document.body.innerHTML;
     $.each(words.words, function() {
         // 正規表現これでよいのか検討すべき
+        // TODO: this.nameが正規表現っぽいときバグるので，エスケープしたい
         html = html.replace(new RegExp(["(>[^><]*)(", this.name, ")([^><]*<)"].join(""), "ig"),
             "$1<span class='select-wiki-keyword'>$2</span>$3");
     });
@@ -159,10 +143,7 @@ with (Ten.SubWindow) {
         height: "20em"
     };
     style.textAlign = "left";
-
-
 };
-
 
 jQuery(document).mouseup(function(){
     var selection = content.window.getSelection();
