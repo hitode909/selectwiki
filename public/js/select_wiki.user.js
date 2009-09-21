@@ -15,7 +15,6 @@ $.fn.extend(function(element) {
         var container = $("<div id='container'>");
         subWindow.append(container);
     }
-    
 });
 
 var RootURI = "http://localhost:7000/";
@@ -90,8 +89,7 @@ var gotDescription = function(element, response) {
 
 var descriptionElement = function(element, name) {
     var el = $("<div>");
-    el.append($("<h3>").text(name));
-    element.innerHTML = el[0].innerHTML;
+    $(element).empty().append($("<h3>").text(name));
     GM_xmlhttpRequest({
             method: "GET",
             url: api("word/?word=" + name),
@@ -163,3 +161,25 @@ with (Ten.SubWindow) {
 
 
 };
+
+
+jQuery(document).mouseup(function(){
+    var selection = window.getSelection();
+    var range = selection.getRangeAt(0);
+    if (range.startOffset != range.endOffset && range.startContainer == range.endContainer) {
+        var name = window.getSelection().toString();
+        range.surroundContents($("<span class='select-wiki-keyword-new'>")[0]);
+        var keywordStyle = {
+            "text-decoration": "underline",
+            "cursor": "pointer",
+            "background-color": "#ff0"
+        };
+        var elem = $(".select-wiki-keyword-new").removeClass("select-wiki-keyword-new").addClass("select-wiki-keyword");
+        elem.css(keywordStyle);
+        var w = new Ten.SubWindow;
+        descriptionElement(w.container, name);
+        var pos = elem.position();
+        w.show({x: pos.left + elem.width(), y: pos.top + elem.height() });
+        elem.data("window", w);
+    }
+});
