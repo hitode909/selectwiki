@@ -134,7 +134,7 @@ var gotWords = function(wordsText) {
 };
 
 var words = GM_getValue("words");
-if (typeof(words) == "undefined") {
+if (typeof(words) == "undefined" || true) {
     GM_xmlhttpRequest({
         method: "GET",
         url: api("words/"),
