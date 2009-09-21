@@ -88,36 +88,28 @@ var getWordsObject = function() {
 };
 
 var gotWords = function(words) {
-    console.log(0);
-//    console.log(words);
     var html = document.body.innerHTML;
     $.each(words, function() {
+        console.log(this);
         // 正規表現これでよいのか検討すべき
         // TODO: this.nameが正規表現っぽいときバグるので，エスケープしたい
         html = html.replace(new RegExp(["(>[^><]*)(", this, ")([^><]*<)"].join(""), "ig"),
-            "$1<span class='select-wiki-keyword'>$2</span>$3");
+            "$1<span class='select-wiki-keyword-new'>$2</span>$3");
     });
-    document.body.innerHTML = html;
-    var keywordStyle = {
-        "text-decoration": "underline",
-        cursor: "pointer",
-        "background-color": "#ff0"
-    };
-    console.log(1);
-    var elems = $(".select-wiki-keyword");
-    elems.css(keywordStyle);
+        document.body.innerHTML = html; // イベント取れる!!!!!
+    var elems = $(".select-wiki-keyword-new").removeClass("select-wiki-keyword-new").addClass("select-wiki-keyword");
 
     var self = this;
     elems.mouseover(function() {
         var w = new Ten.SubWindow;
         descriptionElement(w.container, $(this).text());
+        $(w.container).attr('id', 'ten-subwindow-window');
         var pos = $(this).position();
         w.show({x: pos.left + $(this).width(), y: pos.top + $(this).height() });
     });
-    console.log(2);
 };
 
-console.log('gm');
+//
 
 with (Ten.SubWindow) {
     showScreen = false;
@@ -128,6 +120,7 @@ with (Ten.SubWindow) {
         padding: "0"
     };
     style = {
+        zIndex: 2000,
         width: "15em",
         height: "20em"
     };
@@ -140,6 +133,7 @@ jQuery(document).mouseup(function(){
     var range = selection.getRangeAt(0);
     if (range.startOffset == range.endOffset || range.startContainer != range.endContainer || range.collapsed) return;
     var name = selection.toString();
+    console.log(name);
     if (name.length) {
         gotWords([name]);
     }
@@ -160,3 +154,11 @@ if (typeof(words) == "undefined" || true) {
     gotWords(words);
 }
 
+var style = $("<style>").html(
+    [".select-wiki-keyword {",
+     "text-decoration: underline;",
+     "cursor: pointer;",
+     "background-color: #ffa;",
+     "}"
+    ].join("\n"));
+$("head").append(style);
