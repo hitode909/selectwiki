@@ -87,13 +87,14 @@ var getWordsObject = function() {
     return eval("("+words+")");
 };
 
-var gotWords = function(wordsText) {
-    var words = eval("("+wordsText+")");
+var gotWords = function(words) {
+    console.log(0);
+//    console.log(words);
     var html = document.body.innerHTML;
-    $.each(words.words, function() {
+    $.each(words, function() {
         // 正規表現これでよいのか検討すべき
         // TODO: this.nameが正規表現っぽいときバグるので，エスケープしたい
-        html = html.replace(new RegExp(["(>[^><]*)(", this.name, ")([^><]*<)"].join(""), "ig"),
+        html = html.replace(new RegExp(["(>[^><]*)(", this, ")([^><]*<)"].join(""), "ig"),
             "$1<span class='select-wiki-keyword'>$2</span>$3");
     });
     document.body.innerHTML = html;
@@ -102,37 +103,25 @@ var gotWords = function(wordsText) {
         cursor: "pointer",
         "background-color": "#ff0"
     };
+    console.log(1);
     var elems = $(".select-wiki-keyword");
     elems.css(keywordStyle);
+
+    var self = this;
     elems.mouseover(function() {
         var w = new Ten.SubWindow;
         descriptionElement(w.container, $(this).text());
         var pos = $(this).position();
         w.show({x: pos.left + $(this).width(), y: pos.top + $(this).height() });
-        $(this).data("window", w);
     });
-    elems.mouseout(function() {
-//        $(this).data("window").hide();
-    });
+    console.log(2);
 };
 
-var words = GM_getValue("words");
-if (typeof(words) == "undefined" || true) {
-    GM_xmlhttpRequest({
-        method: "GET",
-        url: api("words/"),
-        onload: function(response) {
-            GM_setValue("words", response.responseText);
-            gotWords(response.responseText);
-        }
-    });
-} else {
-    gotWords(words);
-}
+console.log('gm');
 
 with (Ten.SubWindow) {
     showScreen = false;
-    draggable = false;
+    draggable = true;
     handleStyle = false;
     containerStyle = {
         margin: "5px",
@@ -151,17 +140,23 @@ jQuery(document).mouseup(function(){
     var range = selection.getRangeAt(0);
     if (range.startOffset == range.endOffset || range.startContainer != range.endContainer || range.collapsed) return;
     var name = selection.toString();
-    range.surroundContents($("<span class='select-wiki-keyword-new'>")[0]);
-    var keywordStyle = {
-        "text-decoration": "underline",
-        "cursor": "pointer",
-        "background-color": "#ff0"
-    };
-    var elem = $(".select-wiki-keyword-new").removeClass("select-wiki-keyword-new").addClass("select-wiki-keyword");
-    elem.css(keywordStyle);
-    var w = new Ten.SubWindow;
-    descriptionElement(w.container, name);
-    var pos = elem.position();
-    w.show({x: pos.left + elem.width(), y: pos.top + elem.height() });
-    elem.data("window", w);
+    if (name.length) {
+        gotWords([name]);
+    }
 });
+
+var words = GM_getValue("words");
+if (typeof(words) == "undefined" || true) {
+    GM_xmlhttpRequest({
+        method: "GET",
+        url: api("words/"),
+        onload: function(response) {
+            GM_setValue("words", response.responseText);
+            var data = eval("("+response.responseText+")");
+            gotWords(data.words);
+        }
+    });
+} else {
+    gotWords(words);
+}
+
