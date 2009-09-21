@@ -165,22 +165,22 @@ with (Ten.SubWindow) {
 
 
 jQuery(document).mouseup(function(){
-    var selection = window.getSelection();
+    var selection = content.window.getSelection();
+    if (!selection.rangeCount) return;
     var range = selection.getRangeAt(0);
-    if (range.startOffset != range.endOffset && range.startContainer == range.endContainer) {
-        var name = window.getSelection().toString();
-        range.surroundContents($("<span class='select-wiki-keyword-new'>")[0]);
-        var keywordStyle = {
-            "text-decoration": "underline",
-            "cursor": "pointer",
-            "background-color": "#ff0"
-        };
-        var elem = $(".select-wiki-keyword-new").removeClass("select-wiki-keyword-new").addClass("select-wiki-keyword");
-        elem.css(keywordStyle);
-        var w = new Ten.SubWindow;
-        descriptionElement(w.container, name);
-        var pos = elem.position();
-        w.show({x: pos.left + elem.width(), y: pos.top + elem.height() });
-        elem.data("window", w);
-    }
+    if (range.startOffset == range.endOffset || range.startContainer != range.endContainer || range.collapsed) return;
+    var name = selection.toString();
+    range.surroundContents($("<span class='select-wiki-keyword-new'>")[0]);
+    var keywordStyle = {
+        "text-decoration": "underline",
+        "cursor": "pointer",
+        "background-color": "#ff0"
+    };
+    var elem = $(".select-wiki-keyword-new").removeClass("select-wiki-keyword-new").addClass("select-wiki-keyword");
+    elem.css(keywordStyle);
+    var w = new Ten.SubWindow;
+    descriptionElement(w.container, name);
+    var pos = elem.position();
+    w.show({x: pos.left + elem.width(), y: pos.top + elem.height() });
+    elem.data("window", w);
 });
