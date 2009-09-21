@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 module Api
   class WordsController < JsonController
     def index
@@ -41,13 +42,14 @@ module Api
 
     def delete
       respond('The word not found', 404) unless @word
-      respond('The description not found') unless @description
+      respond('The description not found', 404) unless @description
       begin
         DB.transaction do
           @description.destroy
+#          @word.destroy if @word.descriptions.length == 0  # XXX: うまく動かなかった……
         end
       end
-      { :word => @word.to_hash,
+      { :word => (@word.refresh ? @word : {:name => @word_name}).to_hash,
         :error => @error.map(&:message),
       }
     end
