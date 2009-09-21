@@ -39,6 +39,7 @@ var descriptionElement = function(element, name) {
             method: "GET",
             url: api("word/?word=" + name),
             onload: function(response) {
+//                gotDescription(element, response);
                 //GM_setValue("description-" + name, response.responseText);
                 try {
                     var data = eval("(" + response.responseText + ")");
@@ -47,14 +48,30 @@ var descriptionElement = function(element, name) {
                 }
                 var ul = $("<ul>");//.css({"list-style-type": "none"});
                 for (var i=0; i < data.word.descriptions.length; i++) {
-                    var li = $("<li>").text(data.word.descriptions[i].body);
+                    var description = data.word.descriptions[i];
+                    var li = $("<li>").text(description.body);
                     var del_button = $("<img>").attr("src", RootURI + "image/delete.png").css({cursor: "pointer"});
+                    del_button.click(function(){
+                        GM_xmlhttpRequest({
+                            method: "POST",
+                            url: api("word/delete"),
+                            data: ["word=", name, "&id=", description.id].join(""),
+                            headers: {'Content-type': 'application/x-www-form-urlencoded'},
+                            onload: function(response) {
+                                if (response.status == 200) {
+                                    li.empty();
+                                }
+                            }
+                        });
+                    });
                     li.append(del_button);
                     ul.append(li);
                 }
                 var add_form = $("<form>");
                 add_form.append($("<input>").attr({name: "body"}));
-                add_form.append($("<img>").attr("src", RootURI + "image/add.png").css({cursor: "pointer"}));
+                var add_button = $("<img>").attr("src", RootURI + "image/add.png").css({cursor: "pointer"});
+                add_button.click(function(){alert('add');});
+                add_form.append(add_button);
                 ul.append($("<li>").append(add_form));
                 el.append(ul);
                 $(element).empty().append(el);
