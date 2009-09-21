@@ -2,7 +2,7 @@
 module Api
   class WordsController < JsonController
     def index
-      { :words => Word.all.map(&:to_hash)
+      { :words => Word.all.map(&:name)
       }
     end
   end
