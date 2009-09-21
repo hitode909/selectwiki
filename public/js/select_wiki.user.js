@@ -31,6 +31,63 @@ var api = function(path) {
     return RootURI + "api/" + path;
 };
 
+
+var gotDescription = function(element, response) {
+    if (response.status != 200) return;
+    try {
+        var data = eval("(" + response.responseText + ")");
+    } catch (e) {
+        console.log(e);
+        return;
+    }
+    var el = $("<div>");
+    el.append($("<h3>").text(data.word.name));
+
+    var ul = $("<ul>");
+    for (var i=0; i < data.word.descriptions.length; i++) {
+        var description = data.word.descriptions[i];
+        var li = $("<li>").text(description.body);
+        var del_button = $("<img>").attr("src", RootURI + "image/delete.png").css({cursor: "pointer"});
+        li.append(del_button);
+        del_button.data("id", description.id);
+        del_button.click(function(){
+            var el = $(this);
+            GM_xmlhttpRequest({
+                method: "POST",
+                url: api("word/delete"),
+                data: ["word=", data.word.name, "&id=", el.data("id")].join(""),
+                headers: {'Content-type': 'application/x-www-form-urlencoded'},
+                onload: function(response) {
+                    if (response.status == 200) {
+                        gotDescription(element, response);
+                    }
+                }
+            });
+        });
+        ul.append(li);
+    }
+    var input = $("<input>").attr({name: "body"});
+    var add_button = $("<img>").attr("src", RootURI + "image/add.png").css({cursor: "pointer"});
+    add_button.click(function(){
+        var body = input.val();
+        GM_xmlhttpRequest({
+                method: "POST",
+                url: api("word/add"),
+            data: ["word=", data.word.name, "&description=", encodeURIComponent(body)].join(""),
+                headers: {'Content-type': 'application/x-www-form-urlencoded'},
+                onload: function(response) {
+                    if (response.status == 200) {
+                        gotDescription(element, response);
+                    }
+                }
+            });
+        input.val("");
+    });
+    ul.append($("<li>").append(input).append(add_button));
+    el.append(ul);
+    $(element).empty().append(el);
+};
+
 var descriptionElement = function(element, name) {
     var el = $("<div>");
     el.append($("<h3>").text(name));
@@ -39,42 +96,7 @@ var descriptionElement = function(element, name) {
             method: "GET",
             url: api("word/?word=" + name),
             onload: function(response) {
-//                gotDescription(element, response);
-                //GM_setValue("description-" + name, response.responseText);
-                try {
-                    var data = eval("(" + response.responseText + ")");
-                } catch (e) {
-                    console.log(e);
-                }
-                var ul = $("<ul>");//.css({"list-style-type": "none"});
-                for (var i=0; i < data.word.descriptions.length; i++) {
-                    var description = data.word.descriptions[i];
-                    var li = $("<li>").text(description.body);
-                    var del_button = $("<img>").attr("src", RootURI + "image/delete.png").css({cursor: "pointer"});
-                    del_button.click(function(){
-                        GM_xmlhttpRequest({
-                            method: "POST",
-                            url: api("word/delete"),
-                            data: ["word=", name, "&id=", description.id].join(""),
-                            headers: {'Content-type': 'application/x-www-form-urlencoded'},
-                            onload: function(response) {
-                                if (response.status == 200) {
-                                    li.empty();
-                                }
-                            }
-                        });
-                    });
-                    li.append(del_button);
-                    ul.append(li);
-                }
-                var add_form = $("<form>");
-                add_form.append($("<input>").attr({name: "body"}));
-                var add_button = $("<img>").attr("src", RootURI + "image/add.png").css({cursor: "pointer"});
-                add_button.click(function(){alert('add');});
-                add_form.append(add_button);
-                ul.append($("<li>").append(add_form));
-                el.append(ul);
-                $(element).empty().append(el);
+                gotDescription(element, response);
             }
         });
 };
