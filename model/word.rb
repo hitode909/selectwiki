@@ -1,12 +1,12 @@
-class Word < Sequel::Model
-  set_schema do
-    primary_key :id
-    String :name, :unique => true, :null => false
-    time :created_at
-    time :modified_at
-  end
-  one_to_many  :descriptions, :order => :id
-  create_table unless table_exists?
+class Word
+  include DataMapper::Resource
+  property :id,          Serial, :serial => true
+  property :name,        String, :key    => true, :nullable => false # unique
+  property :created_at,  DateTime
+  property :modified_at, DateTime
+
+  has n, :descriptions, :model => 'Description'
+  #create_table unless table_exists?
 
   def before_create
     self.created_at = Time.now
@@ -24,16 +24,15 @@ class Word < Sequel::Model
 
   def add(body)
     return unless body
-    DB.transaction do
-      desc = Description.create(:body => body)
-      self.add_description(desc)
+    transaction do |txn|
+      desc = self.descriptions.new(:body => body)
+      desc.save
     end
   end
 
   def delete(id)
-    desc = Description.find(:id => id)
+    desc = Description.first(:id => id, :word_id => self.id)
     return unless desc
-    self.remove_description(desc)
     desc.destroy
   end
 end

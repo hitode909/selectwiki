@@ -10,9 +10,9 @@ module Api
   class WordController < JsonController
     before_all do
       @word_name = url_decode request[:word]
-      @word      = Word.find(:name => @word_name)
+      @word      = Word.first(:name => @word_name)
       @description_body = url_decode request[:description]
-      @description = Description.find(:id => request[:id], :word_id => (@word.id || 0))
+      @description = Description.first(:id => request[:id], :word_id => (@word.id || 0))
       @error = []
     end
 
@@ -44,12 +44,10 @@ module Api
       respond('The word not found', 404) unless @word
       respond('The description not found', 404) unless @description
       begin
-        DB.transaction do
-          @description.destroy
+        @description.destroy
 #          @word.destroy if @word.descriptions.length == 0  # XXX: うまく動かなかった……
-        end
       end
-      { :word => (@word.refresh ? @word : {:name => @word_name}).to_hash,
+      { :word => @word.to_hash,
         :error => @error.map(&:message),
       }
     end
