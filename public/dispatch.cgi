@@ -6,9 +6,10 @@ Dir.chdir("..")
 
 require 'rubygems'
 require 'ramaze'
+require 'ramaze/log/informer'
 
-Ramaze::Log.loggers = [ Ramaze::Logger::Informer.new("ramaze.log") ]
-Ramaze::Global.adapter = :cgi
 
+Ramaze.options.adapter.handler = :cgi
+Ramaze::Log.loggers = [ Ramaze::Logger::Informer.new( "ramaze.cgi.log" ) ]
 $0 = "start.rb"
 load $0
