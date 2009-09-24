@@ -6,7 +6,7 @@ api_version: 1
 handlers:
 - url: /favicon.ico
   static_files: public/favicon.ico
-  upload: htdocs/favicon.ico
+  upload: public/favicon.ico
   mime_type: image/x-icon
 
 - url: /js/(.*)
