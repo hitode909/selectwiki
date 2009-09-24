@@ -1,9 +1,34 @@
-body {
-  background: #cfc;
+* {
+    margin: 0px;
+    padding: 0px;
 }
 
-#content {
-  margin: 1em;
-  background: #fff;
-  padding: 1em;
+#content, #footer {
+    margin:auto;
+    padding:2em;
+    position:relative;
+    width:80%;
+}
+
+#content h1, #content h2{
+    margin: 35px 0px 20px;
+}
+
+#content p {
+    line-height: 1.5;
+}
+
+#content div.words {
+    padding: 1em;
+    border:1px solid #aaa;
+}
+
+#footer {
+    margin-left: 4em;
+    margin-top: 40em;
+}
+
+ul.inline, ul.inline li {
+    display: inline;
+    margin-right: 4px;
 }

@@ -1,18 +1,31 @@
 <html>
   <head>
-    <title>ようこそ</title>
-    <link rel="stylesheet" type="text/css" href="/dic/css/screen.css" media="all" />
+    <title>WeDictionary</title>
+    <link rel="stylesheet" type="text/css" href="/css/screen.css" media="all" />
   </head>
   <body>
     <div id="content">
-      <h1>ようこそ</h1>
-      <p><a href="/js/wedictionary.user.js">ここ</a>から，Greasemonkeyをインストールしましょう．</p>
-      <p>気になる単語にマウスを合わせたり，選択したりすることで，説明を追加できます．</p>
+      <h1>WeDictionary</h1>
+      <h2>概要</h2>
+      <p>WeDictionaryは，みんなで作る辞書です．</p>
+      <h2>使い方</h2>
+      <p><a href="/js/wedictionary.user.js">ここ</a>から，Greasemonkeyをインストールしてください．</p>
+      <p>ハイライトされた単語にマウスポインタを合わせると，説明がポップアップします．</p>
+      <p>もしくは，単語を選択して，単語を追加することができます．</p>
       <h2>登録されている単語</h2>
-      <ul>
-        {% for word in words %}
-        <li>{{ word.name }}</li>
-        {% endfor %}
+      <div class="words">
+        <ul class="inline">
+          {% for word in words %}
+          <li>{{ word.name }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div id="footer">
+      <ul class="inline">
+        <li>連絡先</li>
+        <li><a href="http://twitter.com/hitode909">hitode909</a></li>
+        <li><a href="http://twitter.com/mechairoi">mechairoi</a></li>
       </ul>
     </div>
   </body>
