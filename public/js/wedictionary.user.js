@@ -166,7 +166,8 @@ with (Ten.SubWindow) {
         zIndex: 2000,
         width: "20em",
         height: "20em",
-        textAlign: "left"
+        textAlign: "left",
+        overflow: "auto"
     };
 };
 
