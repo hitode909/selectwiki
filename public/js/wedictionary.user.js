@@ -11,6 +11,11 @@
 var RootURI = "http://wedictionary.appspot.com/";
 //var RootURI = "http://localhost:8080/dic/";
 
+// http://blog.livedoor.jp/dankogai/archives/51058313.html
+String.prototype.quotemeta = function(){
+  return this.replace(/([^0-9A-Za-z_])/g, '\\$1');
+};
+
 var api = function(path) {
     return RootURI + "api/" + path;
 };
@@ -117,8 +122,8 @@ var getWordsObject = function() {
 
 var gotWords = function(words) {
     //XXX: wordsのescape! が必要
-    console.log("(" + words.join('|') + ")");
-    var regex = new RegExp("(" + words.join('|') + ")", "g");
+    console.log("(" + words.map(function(w){return w.quotemeta();}).join('|') + ")");
+    var regex = new RegExp("(" + words.map(function(w){return w.quotemeta();}).join('|') + ")", "g");
     var tmp = [];
     filterTextNode(document.body, function(textNode) {
         var parent = textNode.parentNode;
