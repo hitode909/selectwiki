@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name           select wiki
-// @namespace      http://www.hatena.ne.jp/hitode909/
-// @description    select wiki
+// @name           wedictionary
+// @namespace      http://wedictionary.appspot.com/
+// @description    we are dictionary
 // @include        *
 // @require        http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js
 // @require        http://www.hatena.ne.jp/js/Ten.js
 // @require        http://www.hatena.ne.jp/js/Ten/Ten/SubWindow.js
 // ==/UserScript==
 
-var RootURI = "http://hitode909.appspot.com/dic/";
+var RootURI = "http://wedictionary.appspot.com/";
 //var RootURI = "http://localhost:8080/dic/";
 
 var api = function(path) {
@@ -133,7 +133,7 @@ var gotWords = function(words) {
                 df.appendChild(document.createTextNode(x[i]));
             } else {
                 var e = document.createElement('span');
-                e.className = 'select-wiki-keyword-new';
+                e.className = 'wedictionary-keyword-new';
                 e.appendChild(document.createTextNode(x[i]));
                 df.appendChild(e);
             }
@@ -143,7 +143,7 @@ var gotWords = function(words) {
     for(var i=0; i<tmp.length; i++) {
         tmp[i][1].parentNode.replaceChild(tmp[i][0], tmp[i][1]);
     }
-    var elems = $(".select-wiki-keyword-new").removeClass("select-wiki-keyword-new").addClass("select-wiki-keyword");
+    var elems = $(".wedictionary-keyword-new").removeClass("wedictionary-keyword-new").addClass("wedictionary-keyword");
 
     elems.mouseover(function() {
         var w = new Ten.SubWindow;
@@ -193,7 +193,7 @@ if (typeof(words) == "undefined" || true) {
 
 var style = $("<style>").html(
     [
-    ".select-wiki-keyword {",
+    ".wedictionary-keyword {",
     "text-decoration: underline;",
     "background-color: #ffc;",
     "}",
