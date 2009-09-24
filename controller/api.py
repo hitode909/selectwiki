@@ -12,7 +12,7 @@ class WordsPage(webapp.RequestHandler):
       result = simplejson.dumps(
         {"words": [ w.name for w in Word.all().fetch(1000) ]},
         ensure_ascii=False)
-      memcache.add("words", result)
+      memcache.set("words", result)
     
     self.response.content_type = "application/json"
     self.response.out.write(result)
@@ -32,8 +32,10 @@ class WordPage(webapp.RequestHandler):
         self.response.set_status(404)
         self.response.out.write('word not found')
         return
+      logging.info("cache not hit(%s)" % (word.name))
+
       result = simplejson.dumps({"word": word.to_hash()}, ensure_ascii=False)
-      memcache.add("word-" + word_name, result)
+      memcache.set("word-" + word_name, result)
     
     self.response.content_type = "application/json"
     self.response.out.write(result)
@@ -57,7 +59,7 @@ class WordPage(webapp.RequestHandler):
       memcache.delete("words")
 
     result = simplejson.dumps({"word": word.to_hash()}, ensure_ascii=False)
-    memcache.delete("word-" + word_name)
+    memcache.set("word-" + word_name, result)
 
     logging.info("description add(%s, %s)" % (word.name, description_body))
     self.response.content_type = "application/json"
@@ -90,7 +92,7 @@ class WordPage(webapp.RequestHandler):
     logging.info("description delete(%s, %s)" % (word.name, desc.body))
     desc.delete()
     result = simplejson.dumps({"word": word.to_hash()}, ensure_ascii=False)
-    memcache.delete("word-" + word_name)
+    memcache.set("word-" + word_name, result)
     
     self.response.content_type = "application/json"
     self.response.out.write(result)
