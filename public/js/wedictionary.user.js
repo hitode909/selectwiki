@@ -9,7 +9,7 @@
 // ==/UserScript==
 
 var RootURI = "http://wedictionary.appspot.com/";
-//var RootURI = "http://localhost:8080/dic/";
+//var RootURI = "http://localhost:8081/";
 
 // http://blog.livedoor.jp/dankogai/archives/51058313.html
 String.prototype.quotemeta = function(){
@@ -207,7 +207,6 @@ var style = $("<style>").html(
     "color: #000;",
     "margin: 0px;",
     "padding: 0px;",
-    "offset: 0px;",
     "border-width: 0px;",
     "width: auto;",
     "background: transparent;",
@@ -217,7 +216,6 @@ var style = $("<style>").html(
     "color: #000;",
     "margin: 0px;",
     "padding: 5px 0px;",
-    "offset: 0px;",
     "font-weight: bold;",
     "border-width: 0px;",
     "text-indent: 0px;",
@@ -228,7 +226,6 @@ var style = $("<style>").html(
     "color: #000;",
     "margin:  0px;",
     "padding: 5px 0px;",
-    "offset: 0px;",
     "width: 100%;",
     "line-height:1.0;",
     "list-style-image : none;",
@@ -240,7 +237,6 @@ var style = $("<style>").html(
     "color: #000;",
     "margin:  0px;",
     "padding: 3px;",
-    "offset: 0px;",
     "width: 100%;",
     "background: transparent;",
     "}",
@@ -249,7 +245,6 @@ var style = $("<style>").html(
     "color: #000;",
     "margin: 0px;",
     "padding: 0px;",
-    "offset: 0px;",
     "font-weight: normal;",
     "width: 80%;",
     "background: transparent;",
@@ -258,7 +253,6 @@ var style = $("<style>").html(
     "cursor: pointer;",
     "margin: 0px 0px 0px 2px;",
     "padding: 0px;",
-    "offset: 0px;",
     "vertical-align: middle;",
     "}"
     ].join("\n"));
