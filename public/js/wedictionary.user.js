@@ -55,7 +55,7 @@ var xhr = function(option) {
 
 var filterTextNode = function(element, filter) {
     if (!element) return null;
-    if (element.nodeType == 3 && !/^(textarea|script|style)$/i.test(element.parentNode.tagName) ) {
+    if (element.nodeType == 3 && !/^(textarea|script|style|object|embed)$/i.test(element.parentNode.tagName) ) {
         filter(element);
     } else {
         var children = element.childNodes;
