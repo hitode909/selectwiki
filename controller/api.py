@@ -27,7 +27,7 @@ class WordPage(webapp.RequestHandler):
     else:
       result = memcache.get("word-" + word_name)
       if not result:
-        logging.info("cache not hit(%s)" % (word.name))
+        logging.info("cache not hit(%s)" % (word_name))
         word = Word.get_by_name(word_name)
         if word:
           result_hash['word'] = word.to_hash()
@@ -58,6 +58,7 @@ class WordPage(webapp.RequestHandler):
       memcache.delete("words")
       memcache.delete("word-"+word_name)
       logging.info("description add(%s, %s)" % (word.name, description_body))
+      result_hash['word'] = word.to_hash()
 
     if not word.descriptions:
       logging.info("word delete(%s)" % (word.name))
@@ -90,10 +91,10 @@ class WordPage(webapp.RequestHandler):
         else:
           logging.info("description delete(%s, %s)" % (word.name, desc.body))
           desc.delete()
-
-    if not word.descriptions:
-      logging.info("word delete(%s)" % (word.name))
-      word.delete()
+          result_hash['word'] = word.to_hash()
+          if not word.descriptions:
+            logging.info("word delete(%s)" % (word.name))
+            word.delete()
       
     result = simplejson.dumps(result_hash, ensure_ascii=False)
     self.response.content_type = "application/json"
