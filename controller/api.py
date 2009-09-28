@@ -91,10 +91,12 @@ class WordPage(webapp.RequestHandler):
         else:
           logging.info("description delete(%s, %s)" % (word.name, desc.body))
           desc.delete()
+          memcache.delete("word-"+word_name)
           result_hash['word'] = word.to_hash()
           if not word.descriptions():
             logging.info("word delete(%s)" % (word.name))
             word.delete()
+            memcache.delete("words")
       
     result = simplejson.dumps(result_hash, ensure_ascii=False)
     self.response.content_type = "application/json"
