@@ -3,6 +3,7 @@
 // @namespace      http://wedictionary.appspot.com/
 // @description    we are dictionary
 // @include        *
+// @exclude        http://wedictionary.appspot.com/*
 // @require        http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js
 // @require        http://www.hatena.ne.jp/js/Ten.js
 // @require        http://www.hatena.ne.jp/js/Ten/Ten/SubWindow.js
@@ -18,6 +19,38 @@ String.prototype.quotemeta = function(){
 
 var api = function(path) {
     return RootURI + "api/" + path;
+};
+
+var isGM = function() {
+    return (typeof(GM_xmlhttpRequest) != 'undefined');
+};
+
+var isSameDomain = function() {
+    return ('http://' + location.host + '/' == RootURI);
+};
+
+var xhr = function(option) {
+    if (isSameDomain()) {
+        jQuery.ajax(
+            {
+                complete: function(req, st) {option.onload(req);},
+                data: option.data,
+                url: option.url,
+                type: option.method
+            });
+    } else {
+        if (option.method == 'POST') {
+            var header = {'Content-type': 'application/x-www-form-urlencoded'};
+        }
+        GM_xmlhttpRequest(
+            {
+                method: option.method,
+                url: option.url,
+                data: option.data,
+                headers: option.header || header,
+                onload: option.onload
+            });
+    }
 };
 
 var filterTextNode = function(element, filter) {
@@ -40,6 +73,7 @@ var gotDescription = function(element, response) {
         console.log(e);
         return;
     }
+    if (typeof(data.word) == 'undefined') return;
     var el = $("<div>");
     el.append($("<h3>").text(data.word.name));
 
@@ -52,7 +86,7 @@ var gotDescription = function(element, response) {
         del_button.data("key", description.key);
         del_button.click(function(){
             var el = $(this);
-            GM_xmlhttpRequest({
+            xhr({
                 method: "DELETE",
                 url: api("word") + ["?word=", data.word.name, "&key=", el.data("key")].join(""),
                 onload: function(response) {
@@ -78,10 +112,10 @@ var addElement = function(element, name) {
     var add_button = $("<img>").attr("src", RootURI + "image/add.png").addClass("button");
     var submit = function(){
         var body = input.val();
-        GM_xmlhttpRequest({
+        xhr({
                 method: "POST",
                 url: api("word"),
-            data: ["word=", name, "&description=", encodeURIComponent(body)].join(""),
+                data: ["word=", name, "&description=", encodeURIComponent(body)].join(""),
                 headers: {'Content-type': 'application/x-www-form-urlencoded'},
                 onload: function(response) {
                     if (response.status == 200) {
@@ -105,7 +139,7 @@ var descriptionElement = function(element, name) {
     ul.append($("<li>").append(addElement(element, name)));
     $(element).append(ul);
 
-    GM_xmlhttpRequest({
+    xhr({
             method: "GET",
             url: api("word?word=" + name),
             onload: function(response) {
@@ -113,12 +147,6 @@ var descriptionElement = function(element, name) {
             }
         });
 };
-
-var getWordsObject = function() {
-    var words = GM_getValue("words");
-    return eval("("+words+")");
-};
-
 
 var gotWords = function(words) {
     var regex = new RegExp("(" + words.map(function(w){return w.quotemeta();}).join('|') + ")", "g");
@@ -180,20 +208,14 @@ jQuery(document).mouseup(function(){
     }
 });
 
-var words = GM_getValue("words");
-if (typeof(words) == "undefined" || true) {
-    GM_xmlhttpRequest({
+xhr({
         method: "GET",
         url: api("words"),
         onload: function(response) {
-            GM_setValue("words", response.responseText);
             var data = eval("("+response.responseText+")");
             gotWords(data.words);
         }
     });
-} else {
-    gotWords(words);
-}
 
 var style = $("<style>").html(
     [
