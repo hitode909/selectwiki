@@ -102,6 +102,17 @@ var gotDescription = function(element, response) {
     }
     ul.append($("<li>").append(addElement(element, data.word.name)));
     el.append(ul);
+
+    if (typeof(data.notices) != 'undefined') {
+        el.append($("<h3>").text("お知らせ"));
+        ul = $("<ul>");
+        for (var j=0; j < data.notices.length; j++) {
+            var li = $("<li>").text(description.body);
+            li.html(data.notices[i]);
+            ul.append(li);
+        }
+        el.append(ul);
+    }
     $(element).empty().append(el);
 };
 
