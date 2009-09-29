@@ -42,7 +42,7 @@ class WordPage(webapp.RequestHandler):
 
   def post(self):
     result_hash = {"errors": []}
-
+    word = None
     word_name = self.request.get('word')
     if not word_name:
       result_hash['errors'].append('word is empty')
@@ -60,14 +60,18 @@ class WordPage(webapp.RequestHandler):
       logging.info("description add(%s, %s)" % (word.name, description_body))
       result_hash['word'] = word.to_hash()
 
-    if not word.descriptions():
+    if word and not word.descriptions():
       logging.info("word delete(%s)" % (word.name))
       word.delete()
       memcache.delete("words")
 
-    result = simplejson.dumps(result_hash, ensure_ascii=False)
-    self.response.content_type = "application/json"
-    self.response.out.write(result)
+    redirect_to = self.request.get('redirect')
+    if redirect_to:
+      self.redirect(redirect_to)
+    else:
+      result = simplejson.dumps(result_hash, ensure_ascii=False)
+      self.response.content_type = "application/json"
+      self.response.out.write(result)
     return
 
   def delete(self):
@@ -100,8 +104,11 @@ class WordPage(webapp.RequestHandler):
             memcache.delete("words")
             memcache.delete("index")
 
-      
-    result = simplejson.dumps(result_hash, ensure_ascii=False)
-    self.response.content_type = "application/json"
-    self.response.out.write(result)
-    return
+    redirect_to = self.request.get('redirect')
+    if redirect_to:
+      self.redirect(redirect_to)
+    else:
+      result = simplejson.dumps(result_hash, ensure_ascii=False)
+      self.response.content_type = "application/json"
+      self.response.out.write(result)
+      return
