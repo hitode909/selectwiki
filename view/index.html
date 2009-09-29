@@ -37,6 +37,23 @@
           {% endfor %}
         </ul>
       </div>
+      <h2>フォームから説明を追加</h2>
+      <form action="/api/word" method="post" >
+        <input type="hidden" name="redirect" value="/">
+        <table>
+          <tr><td>キーワード：</td>
+            <td><input name="word" type="text" /></td>
+          </tr>
+          <tr>
+            <td>説明：</td>
+            <td><input name="description" type="text" /></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td><input type="submit" value="追加" /></td>
+          </tr>
+        </table>
+      </form>
       <h2>作者</h2>
       <p><a href="http://twitter.com/hitode909">hitode909</a>, <a href="http://twitter.com/mechairoi">mechairoi</a></p>
     </div>
