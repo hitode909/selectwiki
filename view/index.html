@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>WeDictionary</title>
+    <title>WeDictionayは，みんなで作る辞書です．</title>
     <link rel="stylesheet" type="text/css" href="/css/screen.css" media="all" />
     <script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js"></script>
     <script type="text/javascript" src="http://www.hatena.ne.jp/js/Ten.js"></script>
@@ -10,19 +10,24 @@
   <body>
     <div id="content">
       <h1>WeDictionary</h1>
+
       <h2>概要</h2>
       <p>WeDictionaryは，みんなで作る辞書です．</p>
+
       <h2>使い方</h2>
       <p>辞書を使うために，Greasemonkeyをインストールしてください．</p>
       <p>ハイライトされたキーワードにマウスを合わせると，説明が出ます．</p>
-      <p>単語をマウスで選択して，その場でキーワードを追加できます．</p>
-      <p>説明やキーワードは，誰でも，どこでも，追加，閲覧，編集，削除できます．</p>
+      <p>気になる言葉をマウスで選択して，その場でキーワードを追加できます．</p>
+      <p>キーワードや説明は，誰でも，どこでも，追加，閲覧，編集，削除できます．</p>
+
       <h2>デモ</h2>
       <object width="414" height="442"> <param name="movie" value="http://content.screencast.com/users/hitode909/folders/Jing/media/2eaa8a22-9da0-4e0e-a0a6-9f7b656c9cca/jingswfplayer.swf"></param> <param name="quality" value="high"></param> <param name="bgcolor" value="#FFFFFF"></param> <param name="flashVars" value="thumb=http://content.screencast.com/users/hitode909/folders/Jing/media/2eaa8a22-9da0-4e0e-a0a6-9f7b656c9cca/FirstFrame.jpg&containerwidth=414&containerheight=442&loaderstyle=jing&content=http://content.screencast.com/users/hitode909/folders/Jing/media/2eaa8a22-9da0-4e0e-a0a6-9f7b656c9cca/00000001.swf"></param> <param name="allowFullScreen" value="true"></param> <param name="scale" value="showall"></param> <param name="allowScriptAccess" value="always"></param> <param name="base" value="http://content.screencast.com/users/hitode909/folders/Jing/media/2eaa8a22-9da0-4e0e-a0a6-9f7b656c9cca/"></param>  <embed src="http://content.screencast.com/users/hitode909/folders/Jing/media/2eaa8a22-9da0-4e0e-a0a6-9f7b656c9cca/jingswfplayer.swf" quality="high" bgcolor="#FFFFFF" width="414" height="442" type="application/x-shockwave-flash" allowScriptAccess="always" flashVars="thumb=http://content.screencast.com/users/hitode909/folders/Jing/media/2eaa8a22-9da0-4e0e-a0a6-9f7b656c9cca/FirstFrame.jpg&containerwidth=414&containerheight=442&loaderstyle=jing&content=http://content.screencast.com/users/hitode909/folders/Jing/media/2eaa8a22-9da0-4e0e-a0a6-9f7b656c9cca/00000001.swf" allowFullScreen="true" base="http://content.screencast.com/users/hitode909/folders/Jing/media/2eaa8a22-9da0-4e0e-a0a6-9f7b656c9cca/" scale="showall"></embed> </object>
-      <p>このページもデモのように動きます．</p>
+      <p>このページも，デモのように動きます．</p>
+
       <h2>Greasemonkey</h2>
       <p><a href="/js/wedictionary.user.js">http://wedictionary.appspot.com/js/wedictionary.user.js</a></p>
-      <h2>登録されている単語</h2>
+
+      <h2>登録されているキーワード</h2>
       <div class="words">
         <ul class="inline">
           {% for word in words %}
@@ -30,7 +35,7 @@
           {% endfor %}
         </ul>
       </div>
-      <h2>作者と連絡先</h2>
+      <h2>作者</h2>
       <p><a href="http://twitter.com/hitode909">hitode909</a>, <a href="http://twitter.com/mechairoi">mechairoi</a></p>
     </div>
   </body>
