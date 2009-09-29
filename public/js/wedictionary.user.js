@@ -55,7 +55,7 @@ var xhr = function(option) {
 
 var filterTextNode = function(element, filter) {
     if (!element) return null;
-    if (element.nodeType == 3 && !/^(textarea|script|style|object|embed)$/i.test(element.parentNode.tagName) ) {
+    if (element.nodeType == 3 && !/^(textarea|script|style|object|embed|canvas|audio)$/i.test(element.parentNode.tagName) ) {
         filter(element);
     } else {
         var children = element.childNodes;
@@ -206,7 +206,7 @@ with (Ten.SubWindow) {
 };
 
 jQuery(document).mouseup(function(){
-    var selection = content.window.getSelection(); // XXX:ふつうのjs化したいので，うまくやりたい
+    var selection = window.getSelection();
     if (!selection.rangeCount) return;
     var range = selection.getRangeAt(0);
     if (range.startOffset == range.endOffset || range.startContainer != range.endContainer || range.collapsed) return;
