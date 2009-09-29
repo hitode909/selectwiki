@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           wedictionary
 // @namespace      http://wedictionary.appspot.com/
-// @description    we are dictionary
+// @description    みんなで作る辞書
 // @include        *
 // @exclude        http://wedictionary.appspot.com/*
 // @require        http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js
@@ -157,7 +157,9 @@ var descriptionElement = function(element, name) {
 };
 
 var gotWords = function(words) {
-    var regex = new RegExp("(" + words.map(function(w){return w.quotemeta();}).join('|') + ")", "g");
+    var regex = new RegExp("(" + words.sort(function(a,b){return a.length < b.length;}
+                                           ).map(function(w){return w.quotemeta();}
+                                                ).join('|') + ")", "g");
     var tmp = [];
     filterTextNode(document.body, function(textNode) {
         var parent = textNode.parentNode;
