@@ -9,6 +9,8 @@
 // @require        http://www.hatena.ne.jp/js/Ten/Ten/SubWindow.js
 // ==/UserScript==
 
+(function(){
+
 var RootURI = "http://wedictionary.appspot.com/";
 //var RootURI = "http://localhost:8081/";
 
@@ -287,3 +289,5 @@ var style = $("<style>").html(
     "}"
     ].join("\n"));
 $("head").append(style);
+
+})();
