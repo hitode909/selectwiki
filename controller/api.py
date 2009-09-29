@@ -56,6 +56,7 @@ class WordPage(webapp.RequestHandler):
       word.add_description(description_body)
       memcache.delete("words")
       memcache.delete("word-"+word_name)
+      memcache.delete("index")
       logging.info("description add(%s, %s)" % (word.name, description_body))
       result_hash['word'] = word.to_hash()
 
@@ -97,6 +98,8 @@ class WordPage(webapp.RequestHandler):
             logging.info("word delete(%s)" % (word.name))
             word.delete()
             memcache.delete("words")
+            memcache.delete("index")
+
       
     result = simplejson.dumps(result_hash, ensure_ascii=False)
     self.response.content_type = "application/json"

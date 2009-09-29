@@ -15,6 +15,6 @@ class IndexPage(webapp.RequestHandler):
         }
       path = os.path.join(os.path.dirname(__file__), '..', 'view', 'index.html')
       result = template.render(path, template_values)
-      memcache.set("index", result, 60)
+      memcache.set("index", result, 600)
 
     self.response.out.write(result)
