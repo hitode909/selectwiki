@@ -68,6 +68,7 @@ var filterTextNode = function(element, filter) {
 };
     
 var gotDescription = function(element, response) {
+    $("img.loading", element).remove();
     if (response.status != 200) return;
     try {
         var data = eval("(" + response.responseText + ")");
@@ -144,11 +145,10 @@ var addElement = function(element, name) {
 };;
 
 var descriptionElement = function(element, name) {
-    $(element).empty().append($("<h3>").text(name));
+    $(element).empty().append($("<h3>").text(name).append($("<img>").attr({src: RootURI + "image/ajax.gif"}).addClass("loading")));
     var ul = $("<ul>");
     ul.append($("<li>").append(addElement(element, name)));
     $(element).append(ul);
-
     xhr({
             method: "GET",
             url: api("word?word=" + name),
