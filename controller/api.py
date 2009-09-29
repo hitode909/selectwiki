@@ -24,6 +24,7 @@ class WordPage(webapp.RequestHandler):
     word_name = self.request.get('word')
     if not word_name:
       result_hash['errors'].append('word is empty')
+      result = simplejson.dumps(result_hash, ensure_ascii=False)
     else:
       result = memcache.get("word-" + word_name)
       if not result:
